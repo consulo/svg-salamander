@@ -36,12 +36,13 @@
 package com.kitfox.svg;
 
 import com.kitfox.svg.xml.StyleAttribute;
-import java.awt.Color;
+
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -164,7 +165,7 @@ abstract public class Gradient extends FillElement
     private void buildStops()
     {
         ArrayList<Stop> stopList = new ArrayList<Stop>(stops);
-        stopList.sort(new Comparator<Stop>(){
+        Collections.sort(stopList, new Comparator<Stop>(){
             public int compare(Stop o1, Stop o2)
             {
                 return Float.compare(o1.offset, o2.offset);

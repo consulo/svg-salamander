@@ -4,7 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>consulo.internal</groupId>
+  <parent>
+    <groupId>consulo.internal</groupId>
+    <artifactId>svg-salamander-group</artifactId>
+    <version>2-SNAPSHOT</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
   <artifactId>svg-salamander</artifactId>
   <version>2-SNAPSHOT</version>
 
@@ -16,18 +22,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.3</version>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-          <showDeprecation>true</showDeprecation>
-          <showWarnings>true</showWarnings>
-          <fork>true</fork>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>javacc-maven-plugin</artifactId>
@@ -48,9 +42,57 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>consulo.maven</groupId>
+        <artifactId>java9-maven-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <extensions>true</extensions>
+        <configuration>
+          <module>
+            <name>svg.salamander</name>
+            <requires>
+              <require>
+                <module>java.desktop</module>
+              </require>
+              <require>
+                <module>ant</module>
+              </require>
+              <require>
+                <module>java.logging</module>
+              </require>
+            </requires>
+            <exports>
+              <export>
+                <package>com.kitfox.svg</package>
+              </export>
+              <export>
+                <package>com.kitfox.svg.app</package>
+              </export>
+              <export>
+                <package>com.kitfox.svg.animation</package>
+              </export>
+              <export>
+                <package>com.kitfox.svg.composite</package>
+              </export>
+              <export>
+                <package>com.kitfox.svg.pathcmd</package>
+              </export>
+              <export>
+                <package>com.kitfox.svg.pattern</package>
+              </export>
+              <export>
+                <package>com.kitfox.svg.util</package>
+              </export>
+              <export>
+                <package>com.kitfox.svg.xml</package>
+              </export>
+            </exports>
+          </module>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>2.4</version>
+        <version>3.0.1</version>
         <executions>
           <execution>
             <id>attach-sources</id>
@@ -62,6 +104,7 @@
       </plugin>
     </plugins>
   </build>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.ant</groupId>
