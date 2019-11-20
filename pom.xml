@@ -12,6 +12,7 @@
 
   <modules>
     <module>svg-core</module>
+    <module>svg-ant</module>
   </modules>
 
   <properties>

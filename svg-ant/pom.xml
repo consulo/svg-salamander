@@ -11,7 +11,7 @@
     <relativePath>../pom.xml</relativePath>
   </parent>
 
-  <artifactId>svg-salamander</artifactId>
+  <artifactId>svg-salamander-ant</artifactId>
   <version>2-SNAPSHOT</version>
 
   <packaging>jar</packaging>
@@ -22,25 +22,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>javacc-maven-plugin</artifactId>
-        <version>2.6</version>
-        <executions>
-          <execution>
-            <id>jjc1</id>
-            <phase>generate-sources</phase>
-            <goals>
-              <goal>jjtree-javacc</goal>
-            </goals>
-            <configuration>
-              <jdkVersion>1.5</jdkVersion>
-              <sourceDirectory>src/main/java/com/kitfox/svg/animation/parser</sourceDirectory>
-              <outputDirectory>${project.build.directory}/generated-sources/javacc1</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>consulo.maven</groupId>
         <artifactId>java9-maven-plugin</artifactId>
@@ -65,15 +46,14 @@
 
   <dependencies>
     <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>svg-salamander</artifactId>
+      <version>2-SNAPSHOT</version>
+    </dependency>
+    <dependency>
       <groupId>org.apache.ant</groupId>
       <artifactId>ant</artifactId>
       <version>1.10.5</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.7.29</version>
       <scope>provided</scope>
     </dependency>
   </dependencies>
