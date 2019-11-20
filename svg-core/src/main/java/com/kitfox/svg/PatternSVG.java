@@ -37,17 +37,14 @@ package com.kitfox.svg;
 
 import com.kitfox.svg.pattern.PatternPaint;
 import com.kitfox.svg.xml.StyleAttribute;
-import java.awt.Graphics2D;
-import java.awt.Paint;
-import java.awt.RenderingHints;
-import java.awt.TexturePaint;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.net.URI;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Mark McKay
@@ -124,8 +121,7 @@ public class PatternSVG extends FillElement
                 children.addAll(patSrc.children);
             } catch (Exception e)
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                    "Could not parse xlink:href", e);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse xlink:href", e);
             }
         }
 

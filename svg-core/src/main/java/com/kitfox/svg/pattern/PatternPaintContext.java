@@ -37,11 +37,14 @@
 package com.kitfox.svg.pattern;
 
 import com.kitfox.svg.SVGConst;
+import org.slf4j.LoggerFactory;
+
 import java.awt.*;
-import java.awt.geom.*;
-import java.awt.image.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.ColorModel;
+import java.awt.image.Raster;
 
 /**
  * @author Mark McKay
@@ -79,7 +82,7 @@ public class PatternPaintContext implements PaintContext
         }
         catch (Exception e) 
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
         }
 
         sourceWidth = source.getWidth();

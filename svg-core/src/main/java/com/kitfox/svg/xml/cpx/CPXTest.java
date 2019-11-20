@@ -37,9 +37,9 @@
 package com.kitfox.svg.xml.cpx;
 
 import com.kitfox.svg.SVGConst;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Mark McKay
@@ -75,7 +75,7 @@ public class CPXTest {
         }
         catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
         }
     }
 
@@ -97,7 +97,7 @@ public class CPXTest {
         }
         catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
         }
     }
 

@@ -36,6 +36,7 @@
 package com.kitfox.svg;
 
 import com.kitfox.svg.xml.StyleAttribute;
+import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -43,8 +44,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Mark McKay
@@ -349,8 +348,7 @@ abstract public class Gradient extends FillElement
                 }
             } catch (Exception e)
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                    "Could not parse xlink:href", e);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse xlink:href", e);
             }
         }
 

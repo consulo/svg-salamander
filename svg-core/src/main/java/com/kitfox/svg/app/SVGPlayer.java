@@ -37,13 +37,11 @@
 package com.kitfox.svg.app;
 
 
-import com.kitfox.svg.SVGConst;
-import com.kitfox.svg.SVGDiagram;
-import com.kitfox.svg.SVGDisplayPanel;
-import com.kitfox.svg.SVGElement;
-import com.kitfox.svg.SVGException;
-import com.kitfox.svg.SVGUniverse;
-import java.awt.Color;
+import com.kitfox.svg.*;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
@@ -53,14 +51,9 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.AccessControlException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 
 /**
  * @author Mark McKay
@@ -150,8 +143,7 @@ public class SVGPlayer extends javax.swing.JFrame
                 }
                 catch (SVGException ex)
                 {
-                    Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, 
-                        "Could not pick", ex);
+                    LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not pick", ex);
                 }
             }
         }
@@ -191,7 +183,7 @@ public class SVGPlayer extends javax.swing.JFrame
         }
         catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
         }
     }
 
@@ -226,7 +218,7 @@ public class SVGPlayer extends javax.swing.JFrame
             }
             catch (Exception e)
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
             }
         }
 
@@ -367,7 +359,7 @@ public class SVGPlayer extends javax.swing.JFrame
         }
         catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
         }
 
     }//GEN-LAST:event_cm_loadUrlActionPerformed
@@ -411,7 +403,7 @@ public class SVGPlayer extends javax.swing.JFrame
         }
         catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
         }
 
     }//GEN-LAST:event_cm_loadFileActionPerformed

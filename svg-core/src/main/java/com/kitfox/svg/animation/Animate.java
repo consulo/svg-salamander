@@ -44,14 +44,14 @@ import com.kitfox.svg.animation.parser.AnimTimeParser;
 import com.kitfox.svg.xml.ColorTable;
 import com.kitfox.svg.xml.StyleAttribute;
 import com.kitfox.svg.xml.XMLParseUtil;
-import java.awt.Color;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.PathIterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 
 
 /**
@@ -211,8 +211,7 @@ public class Animate extends AnimateBase implements AnimateColorIface
             }
             catch (SVGException ex)
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, 
-                    "Could not get from value", ex);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not get from value", ex);
             }
             double from = style.getDoubleValue();
             return toValue * interp + from * (1.0 - interp);

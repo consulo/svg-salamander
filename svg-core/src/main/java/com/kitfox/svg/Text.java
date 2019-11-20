@@ -37,8 +37,9 @@ package com.kitfox.svg;
 
 import com.kitfox.svg.util.FontSystem;
 import com.kitfox.svg.xml.StyleAttribute;
-import java.awt.Graphics2D;
-import java.awt.Shape;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
@@ -46,8 +47,6 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -288,7 +287,7 @@ public class Text extends ShapeElement
 
         if (font == null)
         {
-            Logger.getLogger(Text.class.getName()).log(Level.WARNING, "Could not create font " + fontFamily);
+            LoggerFactory.getLogger(Text.class.getName()).warn("Could not create font " + fontFamily);
             font = FontSystem.createFont("Serif", fontStyle, fontWeight, fontStyle);
         }
         

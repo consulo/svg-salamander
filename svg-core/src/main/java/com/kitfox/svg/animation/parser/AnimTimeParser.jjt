@@ -51,8 +51,8 @@ import com.kitfox.svg.animation.TimeLookup;
 import com.kitfox.svg.animation.TimeSum;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 public class AnimTimeParser 
 {
@@ -295,8 +295,7 @@ double Number() :
             return Double.parseDouble(t.image);
         }
         catch (Exception e) {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, 
-                "Could not parse double '" + t.image + "'", e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse double '" + t.image + "'", e);
         }
         
         return 0.0;
@@ -307,8 +306,7 @@ double Number() :
             return Double.parseDouble(t.image);
         }
         catch (Exception e) {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, 
-                "Could not parse double '" + t.image + "'", e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse double '" + t.image + "'", e);
         }
         
         return 0.0;
@@ -326,8 +324,7 @@ int Integer() :
             return Integer.parseInt(t.image);
         }
         catch (Exception e) {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, 
-                "Could not parse int '" + t.image + "'", e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse int '" + t.image + "'", e);
         }
         
         return 0;

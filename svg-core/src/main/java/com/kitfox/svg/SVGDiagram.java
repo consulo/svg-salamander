@@ -36,8 +36,9 @@
 
 package com.kitfox.svg;
 
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
+import org.slf4j.LoggerFactory;
+
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -46,8 +47,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 /**
@@ -264,8 +263,7 @@ public class SVGDiagram implements Serializable
                 root.build();
             } catch (SVGException ex)
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, 
-                    "Could not build document", ex);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not build document", ex);
             }
         }
     }

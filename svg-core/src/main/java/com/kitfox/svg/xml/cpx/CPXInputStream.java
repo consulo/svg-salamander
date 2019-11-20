@@ -37,11 +37,14 @@
 package com.kitfox.svg.xml.cpx;
 
 import com.kitfox.svg.SVGConst;
-import java.io.*;
-import java.util.zip.*;
-import java.security.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.SecureRandom;
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
 
 /**
  * This class reads/decodes the CPX file format.  This format is a simple
@@ -219,14 +222,13 @@ public class CPXInputStream extends FilterInputStream implements CPXConsts {
             }
             catch (Exception e)
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
                 return -1;
             }
 
             if (!inflater.finished())
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                    "Inflation imncomplete");
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Inflation imncomplete");
             }
 
             return numRead == 0 ? -1 : numRead;
@@ -238,7 +240,7 @@ public class CPXInputStream extends FilterInputStream implements CPXConsts {
         }
         catch (DataFormatException e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
             return -1;
         }
     }

@@ -36,30 +36,20 @@
 
 package com.kitfox.svg.app;
 
-import com.kitfox.svg.SVGCache;
-import com.kitfox.svg.SVGConst;
-import com.kitfox.svg.SVGDiagram;
-import com.kitfox.svg.SVGDisplayPanel;
-import com.kitfox.svg.SVGElement;
-import com.kitfox.svg.SVGException;
-import com.kitfox.svg.SVGUniverse;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Point;
+import com.kitfox.svg.*;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.AccessControlException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 
 
 /**
@@ -163,7 +153,7 @@ public class SVGViewer extends javax.swing.JFrame
             }
             catch (Exception e)
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
                 return;
             }
         }
@@ -322,7 +312,7 @@ is.close();
         }
         catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn( null, e);
         }
 
     }//GEN-LAST:event_cm_loadUrlActionPerformed
@@ -337,7 +327,7 @@ is.close();
         } 
         catch (SVGException e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn( null, e);
             return;
         }
         
@@ -389,7 +379,7 @@ is.close();
         }
         catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn( null, e);
         }
 
     }//GEN-LAST:event_cm_loadFileActionPerformed

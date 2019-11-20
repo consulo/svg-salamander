@@ -36,6 +36,8 @@ package com.kitfox.svg.app.data;
 
 import com.kitfox.svg.SVGConst;
 import com.kitfox.svg.util.Base64InputStream;
+import org.slf4j.LoggerFactory;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -43,8 +45,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -87,7 +87,7 @@ public class Handler extends URLStreamHandler
                 }
                 catch (IOException e)
                 {
-                    Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+                    LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
                 }
             }
         }

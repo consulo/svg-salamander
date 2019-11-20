@@ -37,12 +37,15 @@
 package com.kitfox.svg.xml;
 
 import com.kitfox.svg.SVGConst;
+import org.slf4j.LoggerFactory;
+
 import java.awt.*;
-import java.io.*;
-import java.net.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.*;
+import java.io.File;
+import java.io.Serializable;
+import java.net.URI;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Mark McKay
@@ -215,7 +218,7 @@ public class StyleAttribute implements Serializable
         }
         catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
             return null;
         }
     }
@@ -230,7 +233,7 @@ public class StyleAttribute implements Serializable
         }
         catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
             return null;
         }
     }
@@ -288,7 +291,7 @@ public class StyleAttribute implements Serializable
         }
         catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
             return null;
         }
     }
@@ -309,7 +312,7 @@ public class StyleAttribute implements Serializable
         }
         catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
         }
     }
 }

@@ -37,14 +37,16 @@
 package com.kitfox.svg;
 
 
-import java.util.*;
-import java.net.*;
-import org.xml.sax.*;
+import com.kitfox.svg.animation.*;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.kitfox.svg.animation.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 
 /**
  * @author Mark McKay
@@ -210,8 +212,7 @@ public class SVGLoader extends DefaultHandler
         }
         catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, 
-                "Could not load", e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not load", e);
             throw new SAXException(e);
         }
 
@@ -266,8 +267,7 @@ public class SVGLoader extends DefaultHandler
         }
         catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, 
-                "Could not parse", e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse", e);
             throw new SAXException(e);
         }
     }

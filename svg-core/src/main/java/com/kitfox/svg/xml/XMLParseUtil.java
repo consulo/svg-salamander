@@ -37,14 +37,21 @@
 package com.kitfox.svg.xml;
 
 import com.kitfox.svg.SVGConst;
-import org.w3c.dom.*;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
+
 import java.awt.*;
-import java.net.*;
-import java.util.*;
-import java.util.regex.*;
-import java.lang.reflect.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.lang.reflect.Array;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Mark McKay
@@ -151,7 +158,7 @@ public class XMLParseUtil
         }
         catch (StringIndexOutOfBoundsException e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, 
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn( 
                 "XMLParseUtil: regex parse problem: '" + val + "'", e);
         }
 
@@ -553,7 +560,7 @@ public class XMLParseUtil
             }
             catch (Exception e)
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn( null, e);
                 continue;
             }
             newObj.read(ele, docRoot);
@@ -600,7 +607,7 @@ public class XMLParseUtil
             }
             catch (Exception e)
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn( null, e);
                 continue;
             }
             newObj.read(ele, docRoot);
@@ -642,7 +649,7 @@ public class XMLParseUtil
             }
             catch (Exception e)
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn( null, e);
                 continue;
             }
             newObj.read(ele, docRoot);
@@ -686,7 +693,7 @@ public class XMLParseUtil
             }
             catch (Exception e)
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
                 continue;
             }
             newObj.read(ele, docRoot);

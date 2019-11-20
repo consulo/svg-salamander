@@ -43,12 +43,11 @@ import com.kitfox.svg.SVGLoaderHelper;
 import com.kitfox.svg.animation.parser.AnimTimeParser;
 import com.kitfox.svg.animation.parser.ParseException;
 import com.kitfox.svg.xml.StyleAttribute;
-import java.io.StringReader;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import java.io.StringReader;
 
 /**
  * @author Mark McKay
@@ -374,8 +373,7 @@ public abstract class AnimationElement extends SVGElement
             try {
                 this.beginTime = animTimeParser.Expr();
             } catch (ParseException ex) {
-                    Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, 
-                        "Could not parse '" + newVal + "'", ex);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse '" + newVal + "'", ex);
             }
         }
 
@@ -386,8 +384,7 @@ public abstract class AnimationElement extends SVGElement
             try {
                 this.durTime = animTimeParser.Expr();
             } catch (ParseException ex) {
-                    Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, 
-                        "Could not parse '" + newVal + "'", ex);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse '" + newVal + "'", ex);
             }
         }
 
@@ -398,8 +395,7 @@ public abstract class AnimationElement extends SVGElement
             try {
                 this.endTime = animTimeParser.Expr();
             } catch (ParseException ex) {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, 
-                    "Could not parse '" + newVal + "'", ex);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse '" + newVal + "'", ex);
             }
         }
 

@@ -37,10 +37,11 @@
 package com.kitfox.svg.app;
 
 import com.kitfox.svg.SVGConst;
-import java.net.*;
-import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
 
 /**
  *
@@ -83,7 +84,7 @@ public class VersionDialog extends javax.swing.JDialog
         }
         catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, null, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(null, e);
         }
         
     }

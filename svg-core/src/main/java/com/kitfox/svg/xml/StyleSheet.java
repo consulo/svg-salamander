@@ -5,9 +5,9 @@
 package com.kitfox.svg.xml;
 
 import com.kitfox.svg.SVGConst;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -20,8 +20,7 @@ public class StyleSheet
     public static StyleSheet parseSheet(String src)
     {
         //Implement CS parser later
-        Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-            "CSS parser not implemented yet");
+        LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("CSS parser not implemented yet");
         return null;
     }
     

@@ -36,11 +36,11 @@
 
 package com.kitfox.svg;
 
+import org.slf4j.LoggerFactory;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.geom.Rectangle2D;
 
 /**
  * @author Mark McKay
@@ -137,8 +137,7 @@ public class SVGDisplayPanel extends javax.swing.JPanel implements Scrollable
             }
             catch (SVGException e)
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING, 
-                    "Could not render diagram", e);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not render diagram", e);
             }
         }
     }
