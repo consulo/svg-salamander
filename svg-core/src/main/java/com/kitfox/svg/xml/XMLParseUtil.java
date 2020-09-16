@@ -61,6 +61,7 @@ public class XMLParseUtil
 {
     static final Matcher fpMatch = Pattern.compile("([-+]?((\\d*\\.\\d+)|(\\d+))([eE][+-]?\\d+)?)(\\%|in|cm|mm|pt|pc|px|em|ex)?").matcher("");
     static final Matcher intMatch = Pattern.compile("[-+]?\\d+").matcher("");
+    static final Matcher quoteMatch = Pattern.compile("^'|'$").matcher("");
 
     /** Creates a new instance of XMLParseUtil */
     private XMLParseUtil()
@@ -88,7 +89,7 @@ public class XMLParseUtil
     }
 
     /**
-     * Returns the first node that is a direct child of root with the coresponding
+     * Returns the first node that is a direct child of root with the corresponding
      * name.  Does not search children of children.
      */
     public static Element getFirstChild(Element root, String name)
@@ -828,8 +829,8 @@ public class XMLParseUtil
                 continue;
             }
 
-            String key = styles[i].substring(0, colon).trim();
-            String value = styles[i].substring(colon + 1).trim();
+            String key = styles[i].substring(0, colon).trim().intern();
+            String value = quoteMatch.reset(styles[i].substring(colon + 1).trim()).replaceAll("").intern();
 
             map.put(key, new StyleAttribute(key, value));
         }

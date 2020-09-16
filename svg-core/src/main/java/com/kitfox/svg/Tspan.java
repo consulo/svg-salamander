@@ -228,11 +228,16 @@ public class Tspan extends ShapeElement
 
         //Get font
         Font font = diagram.getUniverse().getFont(fontFamily);
-        if (font == null)
+        if (font == null && fontFamily != null)
         {
-            font = FontSystem.createFont(fontFamily, fontStyle, fontWeight, (int)fontSize);
+            font = FontSystem.createFont(fontFamily, fontStyle, fontWeight, fontSize);
 //            addShapeSysFont(addShape, font, fontFamily, fontSize, letterSpacing, cursor);
 //            return;
+        }
+
+        if (font == null)
+        {
+            font = FontSystem.createFont("Serif", fontStyle, fontWeight, fontSize);
         }
 
 //        FontFace fontFace = font.getFontFace();

@@ -37,17 +37,19 @@ package com.kitfox.svg;
 
 import com.kitfox.svg.app.beans.SVGIcon;
 import com.kitfox.svg.util.Base64InputStream;
-import org.slf4j.LoggerFactory;
-import org.xml.sax.*;
-
-import javax.imageio.ImageIO;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParserFactory;
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Reader;
+import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -55,7 +57,18 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
+import javax.imageio.ImageIO;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
+import org.xml.sax.XMLReader;
 
 /**
  * Many SVG files can be loaded at one time. These files will quite likely need
@@ -82,13 +95,11 @@ public class SVGUniverse implements Serializable
     /**
      * Current time in this universe. Used for resolving attributes that are
      * influenced by track information. Time is in milliseconds. Time 0
-     * coresponds to the time of 0 in each member diagram.
+     * corresponds to the time of 0 in each member diagram.
      */
     protected double curTime = 0.0;
     private boolean verbose = false;
-    //Cache reader for efficiency
-    XMLReader cachedReader;
-    
+
     //If true, <imageSVG> elements will only load image data that is included using inline data: uris
     private boolean imageDataInlineOnly = false;
     
@@ -207,7 +218,7 @@ public class SVGUniverse implements Serializable
                     return url;
                 } catch (IOException ex)
                 {
-                    LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(
+                    Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
                         "Could not decode inline image", ex);
                 }
             }
@@ -221,7 +232,7 @@ public class SVGUniverse implements Serializable
                 return url;
             } catch (MalformedURLException ex)
             {
-                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(
+                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
                     "Bad url", ex);
             }
             return null;
@@ -257,7 +268,7 @@ public class SVGUniverse implements Serializable
             loadedImages.put(imageURL, ref);
         } catch (Exception e)
         {
-            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(
+            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
                 "Could not load image: " + imageURL, e);
         }
     }
@@ -279,7 +290,7 @@ public class SVGUniverse implements Serializable
                 img = ImageIO.read(imageURL);
             } catch (Exception e)
             {
-                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(
+                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
                     "Could not load image", e);
             }
             ref = new SoftReference<BufferedImage>(img);
@@ -306,7 +317,7 @@ public class SVGUniverse implements Serializable
             return getElement(uri, true);
         } catch (Exception e)
         {
-            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(
+            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
                 "Could not parse url " + path, e);
         }
         return null;
@@ -315,8 +326,8 @@ public class SVGUniverse implements Serializable
     /**
      * Looks up a href within our universe. If the href refers to a document
      * that is not loaded, it will be loaded. The URL #target will then be
-     * checked against the SVG diagram's index and the coresponding element
-     * returned. If there is no coresponding index, null is returned.
+     * checked against the SVG diagram's index and the corresponding element
+     * returned. If there is no corresponding index, null is returned.
      */
     public SVGElement getElement(URI path, boolean loadIfAbsent)
     {
@@ -344,7 +355,7 @@ public class SVGUniverse implements Serializable
             return fragment == null ? dia.getRoot() : dia.getElement(fragment);
         } catch (Exception e)
         {
-            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(
+            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
                 "Could not parse path " + path, e);
             return null;
         }
@@ -380,7 +391,7 @@ public class SVGUniverse implements Serializable
             {
                 //Workaround for resources stored in jars loaded by Webstart.
                 //http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6753651
-                url = SVGUniverse.class.getResource("xmlBase.getPath()");
+                url = SVGUniverse.class.getResource(xmlBase.getPath());
             }
             else
             {
@@ -393,7 +404,7 @@ public class SVGUniverse implements Serializable
             return dia;
         } catch (Exception e)
         {
-            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(
+            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
                 "Could not parse", e);
         }
 
@@ -453,14 +464,16 @@ public class SVGUniverse implements Serializable
             }
 
             InputStream is = docRoot.openStream();
-            return loadSVG(uri, new InputSource(createDocumentInputStream(is)));
+            URI result = loadSVG(uri, new InputSource(createDocumentInputStream(is)));
+            is.close();
+            return result;
         } catch (URISyntaxException ex)
         {
-            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(
+            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
                 "Could not parse", ex);
         } catch (IOException e)
         {
-            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(
+            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
                 "Could not parse", e);
         }
 
@@ -558,21 +571,23 @@ public class SVGUniverse implements Serializable
             return new URI(INPUTSTREAM_SCHEME, name, null);
         } catch (Exception e)
         {
-            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(
+            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
                 "Could not parse", e);
             return null;
         }
     }
 
-    private XMLReader getXMLReaderCached() throws SAXException, ParserConfigurationException
+    static SAXParser saxParser;
+    
+    private XMLReader getXMLReader() throws SAXException, ParserConfigurationException
     {
-        if (cachedReader == null)
+        if (saxParser == null)
         {
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            factory.setNamespaceAware(true);
-            cachedReader = factory.newSAXParser().getXMLReader();
+            SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+            saxParserFactory.setNamespaceAware(true);
+            saxParser = saxParserFactory.newSAXParser();
         }
-        return cachedReader;
+        return saxParser.getXMLReader();
     }
 
     protected URI loadSVG(URI xmlBase, InputSource is)
@@ -588,7 +603,7 @@ public class SVGUniverse implements Serializable
         try
         {
             // Parse the input
-            XMLReader reader = getXMLReaderCached();
+            XMLReader reader = getXMLReader();
             reader.setEntityResolver(
                 new EntityResolver()
                 {
@@ -605,14 +620,14 @@ public class SVGUniverse implements Serializable
             return xmlBase;
         } catch (SAXParseException sex)
         {
-            System.err.println("Error processing " + xmlBase);
-            System.err.println(sex.getMessage());
+            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
+                "Error processing " + xmlBase, sex);
 
             loadedDocs.remove(xmlBase);
             return null;
         } catch (Throwable e)
         {
-            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(
+            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
                 "Could not load SVG " + xmlBase, e);
         }
 

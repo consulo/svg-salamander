@@ -37,9 +37,9 @@ package com.kitfox.svg;
 
 import com.kitfox.svg.app.data.Handler;
 import com.kitfox.svg.xml.StyleAttribute;
-import org.slf4j.LoggerFactory;
-
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Composite;
+import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -47,6 +47,8 @@ import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Implements an image.
@@ -111,26 +113,21 @@ public class ImageSVG extends RenderableElement
         {
             if (getPres(sty.setName("xlink:href")))
             {
-                
-                
                 URI src = sty.getURIValue(getXMLBase());
                 if ("data".equals(src.getScheme()))
                 {
                     imageSrc = new URL(null, src.toASCIIString(), new Handler());
                 }
-                else 
+                else if (!diagram.getUniverse().isImageDataInlineOnly())
                 {
-                    
-                    if (!diagram.getUniverse().isImageDataInlineOnly())
+                    try
                     {
-                        try
-                        {
-                            imageSrc = src.toURL();
-                        } catch (Exception e)
-                        {
-                            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse xlink:href " + src, e);
-                            imageSrc = null;
-                        }
+                        imageSrc = src.toURL();
+                    } catch (Exception e)
+                    {
+                        Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
+                            "Could not parse xlink:href " + src, e);
+                        imageSrc = null;
                     }
                 }
             }
@@ -139,32 +136,33 @@ public class ImageSVG extends RenderableElement
             throw new SVGException(e);
         }
 
-        diagram.getUniverse().registerImage(imageSrc);
-
-        //Set widths if not set
-        BufferedImage img = diagram.getUniverse().getImage(imageSrc);
-        if (img == null)
+        if (imageSrc != null)
         {
+            diagram.getUniverse().registerImage(imageSrc);
+
+            //Set widths if not set
+            BufferedImage img = diagram.getUniverse().getImage(imageSrc);
+            if (img == null)
+            {
+                xform = new AffineTransform();
+                bounds = new Rectangle2D.Float();
+                return;
+            }
+
+            if (width == 0)
+            {
+                width = img.getWidth();
+            }
+            if (height == 0)
+            {
+                height = img.getHeight();
+            }
+
+            //Determine image xform
             xform = new AffineTransform();
-            bounds = new Rectangle2D.Float();
-            return;
+            xform.translate(this.x, this.y);
+            xform.scale(this.width / img.getWidth(), this.height / img.getHeight());
         }
-
-        if (width == 0)
-        {
-            width = img.getWidth();
-        }
-        if (height == 0)
-        {
-            height = img.getHeight();
-        }
-
-        //Determine image xform
-        xform = new AffineTransform();
-//        xform.setToScale(this.width / img.getWidth(), this.height / img.getHeight());
-//        xform.translate(this.x, this.y);
-        xform.translate(this.x, this.y);
-        xform.scale(this.width / img.getWidth(), this.height / img.getHeight());
 
         bounds = new Rectangle2D.Float(this.x, this.y, this.width, this.height);
     }
@@ -338,16 +336,16 @@ public class ImageSVG extends RenderableElement
             {
                 URI src = sty.getURIValue(getXMLBase());
 
-                URL newVal;
+                URL newVal = null;
                 if ("data".equals(src.getScheme()))
                 {
                     newVal = new URL(null, src.toASCIIString(), new Handler());
-                } else
+                } else if (!diagram.getUniverse().isImageDataInlineOnly())
                 {
                     newVal = src.toURL();
                 }
 
-                if (!newVal.equals(imageSrc))
+                if (newVal != null && !newVal.equals(imageSrc))
                 {
                     imageSrc = newVal;
                     shapeChange = true;
@@ -355,10 +353,13 @@ public class ImageSVG extends RenderableElement
             }
         } catch (IllegalArgumentException ie)
         {
-            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Image provided with illegal value for href: \"" + sty.getStringValue() + '"', ie);
+            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
+                "Image provided with illegal value for href: \""
+                + sty.getStringValue() + '"', ie);
         } catch (Exception e)
         {
-            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse xlink:href", e);
+            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
+                "Could not parse xlink:href", e);
         }
 
 
