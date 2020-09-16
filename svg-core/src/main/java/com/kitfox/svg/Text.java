@@ -37,6 +37,8 @@ package com.kitfox.svg;
 
 import com.kitfox.svg.util.FontSystem;
 import com.kitfox.svg.xml.StyleAttribute;
+import org.slf4j.LoggerFactory;
+
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -288,7 +290,7 @@ public class Text extends ShapeElement
 
         if (font == null)
         {
-            Logger.getLogger(Text.class.getName()).log(Level.WARNING, "Could not create font " + fontFamily);
+            LoggerFactory.getLogger(Text.class.getName()).warn("Could not create font " + fontFamily);
             font = FontSystem.createFont("Serif", fontStyle, fontWeight, fontSize);
         }
         

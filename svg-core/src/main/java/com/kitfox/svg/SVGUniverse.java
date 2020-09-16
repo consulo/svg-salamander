@@ -37,19 +37,18 @@ package com.kitfox.svg;
 
 import com.kitfox.svg.app.beans.SVGIcon;
 import com.kitfox.svg.util.Base64InputStream;
-import java.awt.Graphics2D;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.*;
+
+import javax.imageio.ImageIO;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Reader;
-import java.io.Serializable;
+import java.io.*;
 import java.lang.ref.SoftReference;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -57,18 +56,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
-import javax.imageio.ImageIO;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-import org.xml.sax.XMLReader;
 
 /**
  * Many SVG files can be loaded at one time. These files will quite likely need
@@ -218,8 +206,7 @@ public class SVGUniverse implements Serializable
                     return url;
                 } catch (IOException ex)
                 {
-                    Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                        "Could not decode inline image", ex);
+                    LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not decode inline image", ex);
                 }
             }
             return null;
@@ -232,8 +219,7 @@ public class SVGUniverse implements Serializable
                 return url;
             } catch (MalformedURLException ex)
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                    "Bad url", ex);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Bad url", ex);
             }
             return null;
         }
@@ -268,8 +254,7 @@ public class SVGUniverse implements Serializable
             loadedImages.put(imageURL, ref);
         } catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                "Could not load image: " + imageURL, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not load image: " + imageURL, e);
         }
     }
 
@@ -290,8 +275,7 @@ public class SVGUniverse implements Serializable
                 img = ImageIO.read(imageURL);
             } catch (Exception e)
             {
-                Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                    "Could not load image", e);
+                LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not load image", e);
             }
             ref = new SoftReference<BufferedImage>(img);
             loadedImages.put(imageURL, ref);
@@ -317,8 +301,7 @@ public class SVGUniverse implements Serializable
             return getElement(uri, true);
         } catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                "Could not parse url " + path, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse url " + path, e);
         }
         return null;
     }
@@ -355,8 +338,7 @@ public class SVGUniverse implements Serializable
             return fragment == null ? dia.getRoot() : dia.getElement(fragment);
         } catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                "Could not parse path " + path, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse path " + path, e);
             return null;
         }
     }
@@ -404,8 +386,7 @@ public class SVGUniverse implements Serializable
             return dia;
         } catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                "Could not parse", e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse", e);
         }
 
         return null;
@@ -469,12 +450,10 @@ public class SVGUniverse implements Serializable
             return result;
         } catch (URISyntaxException ex)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                "Could not parse", ex);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse", ex);
         } catch (IOException e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                "Could not parse", e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse", e);
         }
 
         return null;
@@ -571,8 +550,7 @@ public class SVGUniverse implements Serializable
             return new URI(INPUTSTREAM_SCHEME, name, null);
         } catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                "Could not parse", e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse", e);
             return null;
         }
     }
@@ -620,15 +598,13 @@ public class SVGUniverse implements Serializable
             return xmlBase;
         } catch (SAXParseException sex)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                "Error processing " + xmlBase, sex);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Error processing " + xmlBase, sex);
 
             loadedDocs.remove(xmlBase);
             return null;
         } catch (Throwable e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                "Could not load SVG " + xmlBase, e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not load SVG " + xmlBase, e);
         }
 
         return null;

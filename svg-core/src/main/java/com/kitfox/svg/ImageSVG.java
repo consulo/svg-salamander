@@ -37,6 +37,8 @@ package com.kitfox.svg;
 
 import com.kitfox.svg.app.data.Handler;
 import com.kitfox.svg.xml.StyleAttribute;
+import org.slf4j.LoggerFactory;
+
 import java.awt.AlphaComposite;
 import java.awt.Composite;
 import java.awt.Graphics2D;
@@ -47,8 +49,6 @@ import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Implements an image.
@@ -125,8 +125,7 @@ public class ImageSVG extends RenderableElement
                         imageSrc = src.toURL();
                     } catch (Exception e)
                     {
-                        Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                            "Could not parse xlink:href " + src, e);
+                        LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse xlink:href " + src, e);
                         imageSrc = null;
                     }
                 }
@@ -353,13 +352,12 @@ public class ImageSVG extends RenderableElement
             }
         } catch (IllegalArgumentException ie)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn(
                 "Image provided with illegal value for href: \""
                 + sty.getStringValue() + '"', ie);
         } catch (Exception e)
         {
-            Logger.getLogger(SVGConst.SVG_LOGGER).log(Level.WARNING,
-                "Could not parse xlink:href", e);
+            LoggerFactory.getLogger(SVGConst.SVG_LOGGER).warn("Could not parse xlink:href", e);
         }
 
 
