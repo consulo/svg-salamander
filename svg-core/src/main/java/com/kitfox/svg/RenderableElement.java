@@ -163,6 +163,15 @@ abstract public class RenderableElement extends TransformableElement
                 g.setClip(newClip);
             }
         }
+
+        if(getPres(styleAttrib.setName("mask"))) {
+            URI uri = styleAttrib.getURIValue(getXMLBase());
+
+            SVGElement ref = diagram.getUniverse().getElement(uri);
+            if(ref instanceof Mask) {
+                g.setClip(((Mask)ref).getShape());
+            }
+        }
     }
 
     /**
