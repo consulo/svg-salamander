@@ -43,7 +43,6 @@ import org.xml.sax.*;
 import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeListener;
@@ -555,17 +554,9 @@ public class SVGUniverse implements Serializable
         }
     }
 
-    static SAXParser saxParser;
-    
-    private XMLReader getXMLReader() throws SAXException, ParserConfigurationException
+    protected XMLReader getXMLReader() throws SAXException, ParserConfigurationException
     {
-        if (saxParser == null)
-        {
-            SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-            saxParserFactory.setNamespaceAware(true);
-            saxParser = saxParserFactory.newSAXParser();
-        }
-        return saxParser.getXMLReader();
+        return XMLReaderSingleton.getXMLReader();
     }
 
     protected URI loadSVG(URI xmlBase, InputSource is)
